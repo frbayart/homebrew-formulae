@@ -1,0 +1,22 @@
+name: GitHub Actions CI
+on:
+  push:
+    branches: master
+  pull_request: []
+jobs:
+  tests:
+    runs-on: macOS-latest
+    steps:
+    - name: Set up Git repository
+      uses: actions/checkout@master
+
+    - name: Set up Homebrew
+      run: |
+        export HOMEBREW_DEVELOPER="1"
+        export HOMEBREW_NO_AUTO_UPDATE=1
+        export CONTINUOUS_INTEGRATION=1
+        brew update-reset
+        mkdir /usr/local/Homebrew/Library/Taps/frbayart
+        ln -s "$PWD" "/usr/local/Homebrew/Library/Taps/frbayart/homebrew-formulae"
+    - name: Run brew install
+      run: brew install frbayart/formulae/k3d
